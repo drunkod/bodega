@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="flex items-center justify-between flex-wrap bg-gray-900 p-6">
+    <nav class="flex items-center justify-between flex-wrap bg-blue-800 p-6">
       <router-link
         to="/"
         class="flex items-center flex-shrink-0 text-white mr-6"
@@ -81,13 +81,13 @@
 <script lang="ts">
   import { defineComponent } from '@vue/runtime-core'
   import firebase from 'firebase'
-  import { mapState } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default defineComponent({
     name: 'Header',
     computed: {
-      ...mapState({
-        user: (state) => state.user,
+      ...mapGetters({
+        user: 'user',
       }),
     },
     methods: {
@@ -101,7 +101,10 @@
           })
       },
       logout() {
-        firebase.auth().signOut()
+        firebase
+          .auth()
+          .signOut()
+          .then(() => this.$router.push('/login'))
       },
     },
   })

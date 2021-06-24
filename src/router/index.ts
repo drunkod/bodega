@@ -10,12 +10,16 @@ const routes = [
     component: Home,
     meta: {
       requiresAuth: true,
+      layout: 'DefaultLayout',
     },
   },
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
     component: Login,
+    meta: {
+      layout: 'AuthLayout',
+    },
   },
 ]
 
@@ -24,14 +28,15 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
+//TODO Fix this!
+/* router.beforeEach((to, from, next) => {
   if (to.matched.some((route) => route.meta.requiresAuth)) {
-    console.log(store.state.user.loggedIn)
-    if (store.state.user.loggedIn) next()
-    else next({ name: 'Login' })
+    if (!store.state.user.loggedIn) {
+      next({ name: 'Login' })
+    } else next()
   } else {
     next()
   }
-})
+}) */
 
 export default router
