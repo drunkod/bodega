@@ -1,7 +1,9 @@
 import { createWebHistory, createRouter } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
-import store from '../store'
+import VillaCobete from '@/views/VillaCobete.vue'
+import New from '@/views/VillaCobete/Payments/New.vue'
+// import store from '../store'
 
 const routes = [
   {
@@ -19,6 +21,24 @@ const routes = [
     component: Login,
     meta: {
       layout: 'AuthLayout',
+    },
+  },
+  {
+    path: '/villacobete',
+    name: 'VillaCobete',
+    component: VillaCobete,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },
+  {
+    path: '/villacobete/payments/new',
+    name: 'New',
+    component: New,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
     },
   },
 ]

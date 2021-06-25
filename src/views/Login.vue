@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto h-full flex justify-center items-center">
     <div class="w-1/3">
-      <h1 class="mb-6 flex w-6/12 text-3xl m-auto">
+      <h1 class="mb-6 block w-6/12 text-3xl m-auto">
         <Logo />
       </h1>
       <div class="flex items-center justify-center">

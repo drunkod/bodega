@@ -1,107 +1,93 @@
 <template>
-  <nav
+  <aside
     class="
-      fixed
-      top-0
-      left-0
       z-20
-      h-full
-      pb-10
-      overflow-x-hidden overflow-y-auto
-      transition
-      origin-left
-      transform
-      bg-gray-900
-      w-60
-      md:translate-x-0
+      flex-shrink-0
+      hidden
+      w-64
+      overflow-y-auto
+      bg-white
+      dark:bg-gray-800
+      md:block
     "
-    :class="{ '-translate-x-full': !sideBar, 'translate-x-0': sideBar }"
   >
-    <router-link to="/" class="flex items-center px-4 py-5 text-white w-8/12">
-      <Logo />
-    </router-link>
-    <nav class="text-sm font-medium text-gray-500" aria-label="Main Navigation">
+    <div class="py-4 text-gray-500 dark:text-gray-400">
       <router-link
-        class="
-          flex
-          items-center
-          px-4
-          py-3
-          transition
-          cursor-pointer
-          group
-          hover:bg-gray-800 hover:text-gray-200
-        "
         to="/"
-      >
-        <HomeIcon
-          class="
-            flex-shrink-0
-            w-5
-            h-5
-            mr-2
-            text-gray-400
-            transition
-            group-hover:text-gray-300
-          "
-        />
-        <span>Home</span>
-      </router-link>
-      <router-link
         class="
-          flex
-          items-center
-          px-4
-          py-3
-          transition
-          cursor-pointer
-          group
-          hover:bg-gray-800 hover:text-gray-200
+          ml-6
+          text-lg
+          font-bold
+          text-gray-800
+          dark:text-gray-200
+          block
+          w-6/12
         "
-        to="/villacobete"
       >
-        <BriefcaseIcon
-          class="
-            flex-shrink-0
-            w-5
-            h-5
-            mr-2
-            text-gray-400
-            transition
-            group-hover:text-gray-300
-          "
-        />
+        <Logo />
+      </router-link>
+      <ul class="mt-6">
+        <li class="relative px-6 py-3">
+          <router-link
+            class="
+              inline-flex
+              items-center
+              w-full
+              text-sm
+              font-semibold
+              transition-colors
+              duration-150
+              hover:text-gray-800
+              dark:hover:text-gray-200
+            "
+            to="/"
+          >
+            <HomeIcon class="w-5 h-5" />
+            <span class="ml-4">Home</span>
+          </router-link>
+        </li>
+        <li class="relative px-6 py-3">
+          <router-link
+            class="
+              inline-flex
+              items-center
+              w-full
+              text-sm
+              font-semibold
+              transition-colors
+              duration-150
+              hover:text-gray-800
+              dark:hover:text-gray-200
+            "
+            to="/villacobete"
+          >
+            <BriefcaseIcon class="w-5 h-5" />
 
-        <span>VillaCobete</span>
-      </router-link>
-      <router-link
-        class="
-          flex
-          items-center
-          px-4
-          py-3
-          transition
-          cursor-pointer
-          group
-          hover:bg-gray-800 hover:text-gray-200
-        "
-        to="settings"
-      >
-        <CogIcon
-          class="
-            flex-shrink-0
-            w-5
-            h-5
-            mr-2
-            text-gray-400
-            transition
-            group-hover:text-gray-300
-          "
-        />
-        <span>Settings</span>
-      </router-link>
-    </nav>
-  </nav>
+            <span class="ml-4">VillaCobete</span>
+          </router-link>
+        </li>
+        <li class="relative px-6 py-3">
+          <router-link
+            class="
+              inline-flex
+              items-center
+              w-full
+              text-sm
+              font-semibold
+              transition-colors
+              duration-150
+              hover:text-gray-800
+              dark:hover:text-gray-200
+            "
+            to="settings"
+          >
+            <CogIcon class="w-5 h-5" />
+            <span class="ml-4">Settings</span>
+          </router-link>
+        </li>
+      </ul>
+    </div>
+  </aside>
 </template>
 
 <script lang="ts">

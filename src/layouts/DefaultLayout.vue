@@ -1,20 +1,15 @@
 <template>
-  <section class="min-h-screen bg-gray-50">
+  <div class="flex h-screen bg-gray-50 dark:bg-gray-900">
     <Sidebar />
-    <Topbar />
-    <!-- Sidebar Backdrop -->
-    <div
-      class="
-        fixed
-        inset-0
-        z-10
-        w-screen
-        h-screen
-        bg-black bg-opacity-25
-        md:hidden
-      "
-    ></div>
-  </section>
+    <div class="flex flex-col flex-1 w-full">
+      <Topbar />
+      <main class="h-full pb-16 overflow-y-auto">
+        <div class="container grid px-6 mx-auto">
+          <router-view />
+        </div>
+      </main>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
