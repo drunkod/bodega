@@ -1,6 +1,6 @@
 <template>
   <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-    New Input
+    New Payment
   </h2>
   <form @submit.prevent="newInput()">
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -63,8 +63,9 @@
           v-model="type"
           required
         >
-          <option>expense</option>
           <option>deposit</option>
+          <option>taxes</option>
+          <option>mortgage</option>
         </select>
       </label>
 
@@ -156,7 +157,7 @@
   import { db } from '@/firebase'
 
   export default defineComponent({
-    name: 'New',
+    name: 'NewPayment',
     data() {
       return {
         name: '',

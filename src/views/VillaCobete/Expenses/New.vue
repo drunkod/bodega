@@ -1,6 +1,6 @@
 <template>
   <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
-    New Input
+    New Expense
   </h2>
   <form @submit.prevent="newInput()">
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -43,6 +43,30 @@
           v-model="date"
           required
         />
+      </label>
+
+      <label class="block mt-4 text-sm">
+        <span class="text-gray-700 dark:text-gray-400">Type</span>
+        <select
+          class="
+            block
+            w-full
+            mt-1
+            text-sm
+            dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+            form-select
+            focus:border-purple-400
+            focus:outline-none
+            focus:shadow-outline-purple
+            dark:focus:shadow-outline-gray
+          "
+          v-model="type"
+          required
+        >
+          <option>basics</option>
+          <option>taxes</option>
+          <option>improvements</option>
+        </select>
       </label>
 
       <label class="block mt-4 text-sm">
@@ -133,7 +157,7 @@
   import { db } from '@/firebase'
 
   export default defineComponent({
-    name: 'New',
+    name: 'NewExpense',
     data() {
       return {
         name: '',
@@ -146,12 +170,13 @@
     },
     methods: {
       newInput() {
-        db.ref('villacobete/cost')
+        db.ref('villacobete/expenses')
           .push({
             name: this.name,
             date: this.date,
             price: this.price,
             total: this.total,
+            type: this.type,
             iva: this.iva || false,
           })
           .then(() => this.$router.push('/villacobete'))
