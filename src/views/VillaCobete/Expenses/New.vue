@@ -154,7 +154,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { db } from '@/firebase'
+  import { db } from '../../../firebase'
 
   export default defineComponent({
     name: 'NewExpense',

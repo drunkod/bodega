@@ -33,7 +33,7 @@
 <script lang="ts">
   import firebase from 'firebase'
   import { defineComponent } from 'vue'
-  import Logo from '@/components/Logo.vue'
+  import Logo from '../components/Logo.vue'
 
   export default defineComponent({
     name: 'Login',

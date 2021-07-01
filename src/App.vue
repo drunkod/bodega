@@ -1,12 +1,15 @@
 <template>
-  <component :is="layout" />
+  <div :class="{ dark: this.dark }">
+    <component :is="layout" />
+  </div>
 </template>
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { mapGetters } from 'vuex'
 
-  import AuthLayout from '@/layouts/AuthLayout.vue'
-  import DefaultLayout from '@/layouts/DefaultLayout.vue'
+  import AuthLayout from './layouts/AuthLayout.vue'
+  import DefaultLayout from './layouts/DefaultLayout.vue'
 
   export default defineComponent({
     name: 'App',
@@ -16,9 +19,10 @@
     },
     data() {
       return {
-        layout: null,
+        layout: '',
       }
     },
+    computed: { ...mapGetters({ dark: 'isDarkMode' }) },
     watch: {
       $route(to) {
         if (to.meta.layout !== undefined) {

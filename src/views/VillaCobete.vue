@@ -331,8 +331,8 @@
     name: 'VillaCobete',
     data() {
       return {
-        payments: null,
-        expenses: null,
+        payments: [],
+        expenses: [],
       }
     },
     components: {

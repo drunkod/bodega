@@ -1,10 +1,10 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import Home from '@/views/Home.vue'
-import Login from '@/views/Login.vue'
-import VillaCobete from '@/views/VillaCobete.vue'
-import NewPayment from '@/views/VillaCobete/Payments/New.vue'
-import NewExpense from '@/views/VillaCobete/Expenses/New.vue'
-import MortgageSimulation from '@/views/VillaCobete/MortgageSimulation.vue'
+import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import VillaCobete from '../views/VillaCobete.vue'
+import NewPayment from '../views/VillaCobete/Payments/New.vue'
+import NewExpense from '../views/VillaCobete/Expenses/New.vue'
+import MortgageSimulation from '../views/VillaCobete/MortgageSimulation.vue'
 import store from '../store'
 
 const routes = [
@@ -68,7 +68,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.getters.isLoggedIn) {
       console.log(store.getters.isLoggedIn)
@@ -80,6 +80,6 @@ router.beforeEach((to, from, next) => {
   } else {
     next() // does not require auth, make sure to always call next()!
   }
-})
+}) */
 
 export default router

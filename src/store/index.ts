@@ -4,15 +4,27 @@ export default createStore({
   state: {
     user: {
       loggedIn: false,
-      data: null,
+      data: <any>{},
     },
+    darkMode: false,
   },
   getters: {
     user(state) {
       return state.user
     },
+    userInitials(state) {
+      if (state.user.data.displayName) {
+        return state.user.data.displayName
+          .split(' ')
+          .map((n: string) => n[0])
+          .join('')
+      }
+    },
     isLoggedIn(state) {
       return state.user.loggedIn
+    },
+    isDarkMode(state) {
+      return state.darkMode
     },
   },
   mutations: {
@@ -21,6 +33,9 @@ export default createStore({
     },
     SET_USER(state, data) {
       state.user.data = data
+    },
+    TOGGLE_DARK_MODE(state) {
+      state.darkMode = !state.darkMode
     },
   },
   actions: {
@@ -34,6 +49,9 @@ export default createStore({
       } else {
         commit('SET_USER', null)
       }
+    },
+    toggleDarkMode({ commit }) {
+      commit('TOGGLE_DARK_MODE')
     },
   },
   modules: {},

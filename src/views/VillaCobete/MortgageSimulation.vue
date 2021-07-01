@@ -18,7 +18,10 @@
               focus:outline-none
               focus:shadow-outline-purple
               dark:text-gray-300 dark:focus:shadow-outline-gray
-              form-input
+              border-gray-200 border
+              rounded-md
+              px-3
+              py-2
             "
             placeholder="ING"
             v-model="bank"
@@ -47,7 +50,10 @@
                 focus:outline-none
                 focus:shadow-outline-purple
                 dark:focus:shadow-outline-gray
-                form-input
+                border-gray-200 border
+                rounded-md
+                px-3
+                py-2
               "
               type="number"
               v-model="price"
@@ -83,7 +89,9 @@
               focus:outline-none
               focus:shadow-outline-purple
               dark:text-gray-300 dark:focus:shadow-outline-gray
-              form-input
+              border-gray-200 border
+              rounded-md
+              py-2
             "
             type="range"
             :min="this.minFinanceQty"
@@ -91,9 +99,80 @@
             v-model="financeQty"
             required
           />
-          <span class="text-gray-700 dark:text-gray-400 mt-4">{{
-            this.financeQty
-          }}</span>
+          <div
+            class="text-gray-700 dark:text-gray-400 mt-4 flex justify-between"
+          >
+            <div class="relative">
+              <input
+                class="
+                  block
+                  w-auto
+                  mt-1
+                  text-sm
+                  dark:border-gray-600 dark:bg-gray-700
+                  focus:border-purple-400
+                  focus:outline-none
+                  focus:shadow-outline-purple
+                  dark:text-gray-300 dark:focus:shadow-outline-gray
+                  border-gray-200 border
+                  rounded-md
+                  px-3
+                  py-2
+                "
+                type="number"
+                v-model="financeQty"
+                required
+              />
+              <div
+                class="
+                  absolute
+                  inset-y-0
+                  right-0
+                  flex
+                  items-center
+                  mr-3
+                  pointer-events-none
+                "
+              >
+                <CurrencyEuroIcon class="w-5 h-5" />
+              </div>
+            </div>
+            <div class="relative">
+              <input
+                class="
+                  block
+                  w-auto
+                  mt-1
+                  text-sm
+                  dark:border-gray-600 dark:bg-gray-700
+                  focus:border-purple-400
+                  focus:outline-none
+                  focus:shadow-outline-purple
+                  dark:text-gray-300 dark:focus:shadow-outline-gray
+                  border-gray-200 border
+                  rounded-md
+                  px-3
+                  py-2
+                "
+                type="number"
+                v-model="financePercentage"
+                required
+              />
+              <div
+                class="
+                  absolute
+                  inset-y-0
+                  right-0
+                  flex
+                  items-center
+                  mr-3
+                  pointer-events-none
+                "
+              >
+                <span class="w-5 h-5">%</span>
+              </div>
+            </div>
+          </div>
         </label>
 
         <label class="block mt-4 text-sm">
@@ -109,7 +188,10 @@
               focus:outline-none
               focus:shadow-outline-purple
               dark:text-gray-300 dark:focus:shadow-outline-gray
-              form-input
+              border-gray-200 border
+              rounded-md
+              px-3
+              py-2
             "
             type="number"
             v-model="termLimit"
@@ -130,7 +212,10 @@
               focus:outline-none
               focus:shadow-outline-purple
               dark:text-gray-300 dark:focus:shadow-outline-gray
-              form-input
+              border-gray-200 border
+              rounded-md
+              px-3
+              py-2
             "
             type="number"
             v-model="tin"
@@ -151,7 +236,10 @@
               focus:outline-none
               focus:shadow-outline-purple
               dark:text-gray-300 dark:focus:shadow-outline-gray
-              form-input
+              border-gray-200 border
+              rounded-md
+              px-3
+              py-2
             "
             type="number"
             v-model="tae"
@@ -181,7 +269,9 @@
       </div>
     </form>
     <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-      <span class="text-white">{{ this.feeFormulae }}</span>
+      <div class="">Mensualidad: {{ this.feeFormulae }}</div>
+      <div class="">Número de cuotas totales: {{ this.totalFees }}</div>
+      <div class="">Importe total a pagar: {{ this.totalMortgage }}</div>
     </div>
   </div>
 </template>
@@ -197,7 +287,7 @@
     },
     data() {
       return {
-        name: '',
+        bank: '',
         price: 305000,
         minFinanceQty: 50000,
         financeQty: 244000,
@@ -210,15 +300,23 @@
       maxFinanceQty(): number {
         return (this.price / 100) * 80
       },
+      financePercentage(): number {
+        return (100 / this.price) * this.financeQty
+      },
       totalFees(): number {
         return this.termLimit * 12
       },
       updateFormulae(): number {
-        const i = this.tin / 12
+        const i = this.tin / 12 / 100
         return (1 - Math.pow(1 + i, -this.totalFees)) / i
       },
       feeFormulae(): number {
         return this.financeQty / this.updateFormulae
+      },
+      totalMortgage(): number {
+        return (
+          this.feeFormulae * this.totalFees + (this.financeQty / 100) * this.tae
+        )
       },
     },
     methods: {},

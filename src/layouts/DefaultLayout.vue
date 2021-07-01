@@ -15,8 +15,8 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
 
-  import Sidebar from '@/components/Sidebar.vue'
-  import Topbar from '@/components/Topbar.vue'
+  import Sidebar from '../components/Sidebar.vue'
+  import Topbar from '../components/Topbar.vue'
 
   export default defineComponent({
     name: 'DefaultLayout',
