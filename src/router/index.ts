@@ -4,7 +4,8 @@ import Login from '@/views/Login.vue'
 import VillaCobete from '@/views/VillaCobete.vue'
 import NewPayment from '@/views/VillaCobete/Payments/New.vue'
 import NewExpense from '@/views/VillaCobete/Expenses/New.vue'
-// import store from '../store'
+import MortgageSimulation from '@/views/VillaCobete/MortgageSimulation.vue'
+import store from '../store'
 
 const routes = [
   {
@@ -51,6 +52,15 @@ const routes = [
       layout: 'DefaultLayout',
     },
   },
+  {
+    path: '/villacobete/simulation',
+    name: 'Mortgage Simulation',
+    component: MortgageSimulation,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },
 ]
 
 const router = createRouter({
@@ -58,15 +68,18 @@ const router = createRouter({
   routes,
 })
 
-//TODO Fix this!
-/* router.beforeEach((to, from, next) => {
-  if (to.matched.some((route) => route.meta.requiresAuth)) {
-    if (!store.state.user.loggedIn) {
+router.beforeEach((to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!store.getters.isLoggedIn) {
+      console.log(store.getters.isLoggedIn)
+      console.log('FALSE')
       next({ name: 'Login' })
-    } else next()
+    } else {
+      next() // go to wherever I'm going
+    }
   } else {
-    next()
+    next() // does not require auth, make sure to always call next()!
   }
-}) */
+})
 
 export default router

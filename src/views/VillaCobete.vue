@@ -3,6 +3,30 @@
     VillaCobete
   </h2>
 
+  <router-link
+    to="/villacobete/simulation"
+    class="
+      flex
+      items-center
+      justify-between
+      p-4
+      mb-8
+      text-sm
+      font-semibold
+      text-purple-100
+      bg-purple-600
+      rounded-lg
+      shadow-md
+      focus:outline-none focus:shadow-outline-purple
+    "
+  >
+    <div class="flex items-center">
+      <CurrencyEuroIcon class="w-5 h-5 mr-2" />
+      <span>Mortgage simulation</span>
+    </div>
+    <span>View more →</span>
+  </router-link>
+
   <div class="flex items-center justify-between mb-4">
     <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
       Expenses
@@ -295,7 +319,11 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { PencilAltIcon, TrashIcon } from '@heroicons/vue/solid'
+  import {
+    PencilAltIcon,
+    TrashIcon,
+    CurrencyEuroIcon,
+  } from '@heroicons/vue/solid'
 
   import { db } from '../firebase'
 
@@ -310,6 +338,7 @@
     components: {
       PencilAltIcon,
       TrashIcon,
+      CurrencyEuroIcon,
     },
     created() {
       db.ref('villacobete/payments').on(

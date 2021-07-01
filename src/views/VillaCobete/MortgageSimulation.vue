@@ -1,0 +1,226 @@
+<template>
+  <h2 class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
+    Calculadora de hipotéca
+  </h2>
+  <div class="grid gap-6 mb-8 md:grid-cols-2">
+    <form class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <div>
+        <label class="block text-sm">
+          <span class="text-gray-700 dark:text-gray-400">Banco</span>
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            placeholder="ING"
+            v-model="bank"
+          />
+        </label>
+
+        <label class="block mt-4 text-sm">
+          <span class="text-gray-700 dark:text-gray-400">Precio vivienda</span>
+          <div
+            class="
+              relative
+              text-gray-500
+              focus-within:text-purple-600
+              dark:focus-within:text-purple-400
+            "
+          >
+            <input
+              class="
+                block
+                w-full
+                pr-10
+                mt-1
+                text-sm text-black
+                dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700
+                focus:border-purple-400
+                focus:outline-none
+                focus:shadow-outline-purple
+                dark:focus:shadow-outline-gray
+                form-input
+              "
+              type="number"
+              v-model="price"
+            />
+            <div
+              class="
+                absolute
+                inset-y-0
+                right-0
+                flex
+                items-center
+                mr-3
+                pointer-events-none
+              "
+            >
+              <CurrencyEuroIcon class="w-5 h-5" />
+            </div>
+          </div>
+        </label>
+
+        <label class="block mt-4 text-sm">
+          <span class="text-gray-700 dark:text-gray-400"
+            >Cantidad a financiar</span
+          >
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="range"
+            :min="this.minFinanceQty"
+            :max="this.maxFinanceQty"
+            v-model="financeQty"
+            required
+          />
+          <span class="text-gray-700 dark:text-gray-400 mt-4">{{
+            this.financeQty
+          }}</span>
+        </label>
+
+        <label class="block mt-4 text-sm">
+          <span class="text-gray-700 dark:text-gray-400">Plazo máximo</span>
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            v-model="termLimit"
+            required
+          />
+        </label>
+
+        <label class="block mt-4 text-sm">
+          <span class="text-gray-700 dark:text-gray-400">TIN</span>
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            v-model="tin"
+            required
+          />
+        </label>
+
+        <label class="block mt-4 text-sm">
+          <span class="text-gray-700 dark:text-gray-400">TAE</span>
+          <input
+            class="
+              block
+              w-full
+              mt-1
+              text-sm
+              dark:border-gray-600 dark:bg-gray-700
+              focus:border-purple-400
+              focus:outline-none
+              focus:shadow-outline-purple
+              dark:text-gray-300 dark:focus:shadow-outline-gray
+              form-input
+            "
+            type="number"
+            v-model="tae"
+            required
+          />
+        </label>
+      </div>
+      <div class="flex items-center justify-start mt-2">
+        <button
+          class="
+            inline-block
+            text-sm
+            px-4
+            py-2
+            leading-none
+            border
+            rounded
+            text-white
+            border-purple-600
+            bg-purple-600
+            hover:bg-transparent hover:text-purple-600
+          "
+          type="submit"
+        >
+          Save
+        </button>
+      </div>
+    </form>
+    <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <span class="text-white">{{ this.feeFormulae }}</span>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+  import { defineComponent } from 'vue'
+  import { CurrencyEuroIcon } from '@heroicons/vue/solid'
+
+  export default defineComponent({
+    name: 'MortgageSimulation',
+    components: {
+      CurrencyEuroIcon,
+    },
+    data() {
+      return {
+        name: '',
+        price: 305000,
+        minFinanceQty: 50000,
+        financeQty: 244000,
+        tin: 1.49,
+        tae: 1.66,
+        termLimit: 30,
+      }
+    },
+    computed: {
+      maxFinanceQty(): number {
+        return (this.price / 100) * 80
+      },
+      totalFees(): number {
+        return this.termLimit * 12
+      },
+      updateFormulae(): number {
+        const i = this.tin / 12
+        return (1 - Math.pow(1 + i, -this.totalFees)) / i
+      },
+      feeFormulae(): number {
+        return this.financeQty / this.updateFormulae
+      },
+    },
+    methods: {},
+  })
+</script>

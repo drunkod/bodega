@@ -11,6 +11,9 @@ export default createStore({
     user(state) {
       return state.user
     },
+    isLoggedIn(state) {
+      return state.user.loggedIn
+    },
   },
   mutations: {
     SET_LOGGED_IN(state, value) {
