@@ -269,9 +269,13 @@
       </div>
     </form>
     <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-      <div class="">Mensualidad: {{ this.feeFormulae }}</div>
-      <div class="">Número de cuotas totales: {{ this.totalFees }}</div>
-      <div class="">Importe total a pagar: {{ this.totalMortgage }}</div>
+      <div class="">Mensualidad: {{ currency.format(this.feeFormulae) }}</div>
+      <div class="">
+        Número de cuotas totales: {{ currency.format(this.totalFees) }}
+      </div>
+      <div class="">
+        Importe total a pagar: {{ currency.format(this.totalMortgage) }}
+      </div>
     </div>
   </div>
 </template>
@@ -294,6 +298,10 @@
         tin: 1.49,
         tae: 1.66,
         termLimit: 30,
+        currency: new Intl.NumberFormat('es-ES', {
+          style: 'currency',
+          currency: 'EUR',
+        }),
       }
     },
     computed: {
@@ -314,9 +322,9 @@
         return this.financeQty / this.updateFormulae
       },
       totalMortgage(): number {
-        return (
-          this.feeFormulae * this.totalFees + (this.financeQty / 100) * this.tae
-        )
+        const i = this.tae / 12 / 100
+        const update = (1 - Math.pow(1 + i, -this.totalFees)) / i
+        return (this.financeQty / update) * this.totalFees
       },
     },
     methods: {},

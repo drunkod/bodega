@@ -22,14 +22,118 @@
   >
     <div class="flex items-center">
       <CurrencyEuroIcon class="w-5 h-5 mr-2" />
-      <span>Mortgage simulation</span>
+      <span>{{ $t('villacobete.mortgateSimulation') }}</span>
     </div>
-    <span>View more →</span>
+    <span>{{ $t('general.viewMore') }} →</span>
   </router-link>
+
+  <!-- Cards -->
+  <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-3">
+    <!-- Card -->
+    <div
+      class="
+        flex
+        items-center
+        p-4
+        bg-white
+        rounded-lg
+        shadow-xs
+        dark:bg-gray-800
+      "
+    >
+      <div
+        class="
+          p-3
+          mr-4
+          text-yellow-500
+          bg-yellow-100
+          rounded-full
+          dark:text-yellow-100 dark:bg-yellow-500
+        "
+      >
+        <HomeIcon class="w-5 h-5" fill="currentColor" />
+      </div>
+      <div>
+        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+          {{ $t('villacobete.housePrice') }}
+        </p>
+        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+          {{ currency.format(305000) }}
+        </p>
+      </div>
+    </div>
+    <!-- Card -->
+    <div
+      class="
+        flex
+        items-center
+        p-4
+        bg-white
+        rounded-lg
+        shadow-xs
+        dark:bg-gray-800
+      "
+    >
+      <div
+        class="
+          p-3
+          mr-4
+          text-green-500
+          bg-green-100
+          rounded-full
+          dark:text-green-100 dark:bg-green-500
+        "
+      >
+        <CalculatorIcon class="w-5 h-5" fill="currentColor" />
+      </div>
+      <div>
+        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+          {{ $t('villacobete.totalPrice') }}
+        </p>
+        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+          {{ currency.format(totalPrice) }}
+        </p>
+      </div>
+    </div>
+    <!-- Card -->
+    <div
+      class="
+        flex
+        items-center
+        p-4
+        bg-white
+        rounded-lg
+        shadow-xs
+        dark:bg-gray-800
+      "
+    >
+      <div
+        class="
+          p-3
+          mr-4
+          text-blue-500
+          bg-blue-100
+          rounded-full
+          dark:text-blue-100 dark:bg-blue-500
+        "
+      >
+        <CurrencyEuroIcon class="w-5 h-5" fill="currentColor" />
+      </div>
+      <div>
+        <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+          {{ $t('villacobete.totalPaid') }}
+        </p>
+        <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+          {{ currency.format(35000) }}
+        </p>
+      </div>
+    </div>
+    <!-- Card -->
+  </div>
 
   <div class="flex items-center justify-between mb-4">
     <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-      Expenses
+      {{ $t('villacobete.expenses') }}
     </h4>
     <router-link
       to="/villacobete/expenses/new"
@@ -50,130 +154,21 @@
         lg:mt-0
       "
     >
-      New
+      {{ $t('general.add') }}
     </router-link>
   </div>
   <div class="w-full overflow-hidden rounded-lg shadow-xs">
     <div class="w-full overflow-x-auto">
-      <table class="w-full whitespace-no-wrap">
-        <thead>
-          <tr
-            class="
-              text-xs
-              font-semibold
-              tracking-wide
-              text-left text-gray-500
-              uppercase
-              border-b
-              dark:border-gray-700
-              bg-gray-50
-              dark:text-gray-400 dark:bg-gray-800
-            "
-          >
-            <th class="px-4 py-3">Name</th>
-            <th class="px-4 py-3">Date</th>
-            <th class="px-4 py-3">Type</th>
-            <th class="px-4 py-3">Value</th>
-            <th class="px-4 py-3">Total</th>
-            <th class="px-4 py-3">IVA Inc.</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-          <tr
-            class="text-gray-700 dark:text-gray-400"
-            v-for="(item, index) in expenses"
-            :key="index"
-          >
-            <td class="px-4 py-3">
-              <div class="flex items-center text-sm">
-                <p class="font-semibold">{{ item.name }}</p>
-              </div>
-            </td>
-            <td class="px-4 py-3 text-sm">{{ item.date }}</td>
-
-            <td class="px-4 py-3 text-xs">
-              <span
-                class="
-                  px-2
-                  py-1
-                  font-semibold
-                  leading-tight
-                  text-green-700
-                  bg-green-100
-                  rounded-full
-                  dark:text-red-100 dark:bg-red-700
-                "
-              >
-                {{ item.type.toUpperCase() }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-sm">{{ item.price }}<span>€</span></td>
-            <td class="px-4 py-3 text-sm">{{ item.total }}<span>€</span></td>
-            <td class="px-4 py-3 text-xs">
-              <span
-                class="
-                  px-2
-                  py-1
-                  font-semibold
-                  leading-tight
-                  text-gray-700
-                  bg-gray-100
-                  rounded-full
-                  dark:text-red-100 dark:bg-red-700
-                "
-              >
-                {{ item.iva ? 'SI' : 'NO' }}
-              </span>
-            </td>
-            <td class="px-4 py-3">
-              <div class="flex items-center space-x-4 text-sm">
-                <button
-                  class="
-                    flex
-                    items-center
-                    justify-between
-                    px-2
-                    py-2
-                    text-sm
-                    font-medium
-                    leading-5
-                    text-purple-600
-                    rounded-lg
-                    dark:text-gray-400
-                    focus:outline-none focus:shadow-outline-gray
-                  "
-                >
-                  <PencilAltIcon class="w-5 h-5" />
-                </button>
-                <button
-                  class="
-                    flex
-                    items-center
-                    justify-between
-                    px-2
-                    py-2
-                    text-sm
-                    font-medium
-                    leading-5
-                    text-purple-600
-                    rounded-lg
-                    dark:text-gray-400
-                    focus:outline-none focus:shadow-outline-gray
-                  "
-                >
-                  <TrashIcon class="w-5 h-5" />
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <CostExpensesTable
+        :items="expenses"
+        type="Expense"
+        :collection="expensesCollection"
+      />
     </div>
   </div>
   <div class="flex items-center justify-between mb-4 mt-8">
     <h4 class="text-lg font-semibold text-gray-600 dark:text-gray-300">
-      Payments
+      {{ $t('villacobete.payments') }}
     </h4>
     <router-link
       to="/villacobete/payments/new"
@@ -194,125 +189,16 @@
         lg:mt-0
       "
     >
-      New
+      {{ $t('general.add') }}
     </router-link>
   </div>
   <div class="w-full overflow-hidden rounded-lg shadow-xs">
     <div class="w-full overflow-x-auto">
-      <table class="w-full whitespace-no-wrap">
-        <thead>
-          <tr
-            class="
-              text-xs
-              font-semibold
-              tracking-wide
-              text-left text-gray-500
-              uppercase
-              border-b
-              dark:border-gray-700
-              bg-gray-50
-              dark:text-gray-400 dark:bg-gray-800
-            "
-          >
-            <th class="px-4 py-3">Name</th>
-            <th class="px-4 py-3">Date</th>
-            <th class="px-4 py-3">Type</th>
-            <th class="px-4 py-3">Value</th>
-            <th class="px-4 py-3">Total</th>
-            <th class="px-4 py-3">IVA Inc.</th>
-            <th class="px-4 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-          <tr
-            class="text-gray-700 dark:text-gray-400"
-            v-for="(item, index) in payments"
-            :key="index"
-          >
-            <td class="px-4 py-3">
-              <div class="flex items-center text-sm">
-                <p class="font-semibold">{{ item.name }}</p>
-              </div>
-            </td>
-            <td class="px-4 py-3 text-sm">{{ item.date }}</td>
-
-            <td class="px-4 py-3 text-xs">
-              <span
-                class="
-                  px-2
-                  py-1
-                  font-semibold
-                  leading-tight
-                  text-green-700
-                  bg-green-100
-                  rounded-full
-                  dark:text-red-100 dark:bg-red-700
-                "
-              >
-                {{ item.type.toUpperCase() }}
-              </span>
-            </td>
-            <td class="px-4 py-3 text-sm">{{ item.price }}<span>€</span></td>
-            <td class="px-4 py-3 text-sm">{{ item.total }}<span>€</span></td>
-            <td class="px-4 py-3 text-xs">
-              <span
-                class="
-                  px-2
-                  py-1
-                  font-semibold
-                  leading-tight
-                  text-gray-700
-                  bg-gray-100
-                  rounded-full
-                  dark:text-red-100 dark:bg-red-700
-                "
-              >
-                {{ item.iva ? 'SI' : 'NO' }}
-              </span>
-            </td>
-            <td class="px-4 py-3">
-              <div class="flex items-center space-x-4 text-sm">
-                <button
-                  class="
-                    flex
-                    items-center
-                    justify-between
-                    px-2
-                    py-2
-                    text-sm
-                    font-medium
-                    leading-5
-                    text-purple-600
-                    rounded-lg
-                    dark:text-gray-400
-                    focus:outline-none focus:shadow-outline-gray
-                  "
-                >
-                  <PencilAltIcon class="w-5 h-5" />
-                </button>
-                <button
-                  class="
-                    flex
-                    items-center
-                    justify-between
-                    px-2
-                    py-2
-                    text-sm
-                    font-medium
-                    leading-5
-                    text-purple-600
-                    rounded-lg
-                    dark:text-gray-400
-                    focus:outline-none focus:shadow-outline-gray
-                  "
-                >
-                  <TrashIcon class="w-5 h-5" />
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <CostExpensesTable
+        :items="payments"
+        type="Payment"
+        :collection="paymentsCollection"
+      />
     </div>
   </div>
 </template>
@@ -320,10 +206,12 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import {
-    PencilAltIcon,
-    TrashIcon,
     CurrencyEuroIcon,
+    HomeIcon,
+    CalculatorIcon,
+    PencilAltIcon,
   } from '@heroicons/vue/solid'
+  import CostExpensesTable from '../components/CostExpensesTable.vue'
 
   import { db } from '../firebase'
 
@@ -333,22 +221,47 @@
       return {
         payments: [],
         expenses: [],
+        totalPrice: 0,
+        currency: new Intl.NumberFormat('es-ES', {
+          style: 'currency',
+          currency: 'EUR',
+        }),
+        paymentsCollection: 'villacobete/payments',
+        expensesCollection: 'villacobete/expenses',
       }
     },
     components: {
       PencilAltIcon,
-      TrashIcon,
       CurrencyEuroIcon,
+      HomeIcon,
+      CalculatorIcon,
+      CostExpensesTable,
     },
     created() {
-      db.ref('villacobete/payments').on(
-        'value',
-        (res) => (this.payments = res.val())
-      )
-      db.ref('villacobete/expenses').on(
-        'value',
-        (res) => (this.expenses = res.val())
-      )
+      this.getPayments()
+      this.getExpenses()
+    },
+    methods: {
+      sumTotals(arr: []): any {
+        console.log(arr)
+        return arr.reduce((a, b) => a + (b[total] || 0), 0)
+      },
+      getPayments() {
+        db.ref(this.paymentsCollection).on('value', (res) => {
+          const item = new Map(Object.entries(res.val()))
+          item.forEach((val, key) => {
+            this.payments.push({ key: key, ...val })
+          })
+        })
+      },
+      getExpenses() {
+        db.ref(this.expensesCollection).on('value', (res) => {
+          const item = new Map(Object.entries(res.val()))
+          item.forEach((val, key) => {
+            this.expenses.push({ key: key, ...val })
+          })
+        })
+      },
     },
   })
 </script>

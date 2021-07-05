@@ -5,6 +5,7 @@ import VillaCobete from '../views/VillaCobete.vue'
 import NewPayment from '../views/VillaCobete/Payments/New.vue'
 import NewExpense from '../views/VillaCobete/Expenses/New.vue'
 import MortgageSimulation from '../views/VillaCobete/MortgageSimulation.vue'
+import EditExpense from '../views/VillaCobete/Expenses/Edit.vue'
 import store from '../store'
 
 const routes = [
@@ -44,9 +45,27 @@ const routes = [
     },
   },
   {
+    path: '/villacobete/expenses/edit/:id',
+    name: 'Edit Payment',
+    component: EditExpense,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },
+  {
     path: '/villacobete/expenses/new',
     name: 'New Expense',
     component: NewExpense,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },
+  {
+    path: '/villacobete/expenses/edit/:id',
+    name: 'Edit Expense',
+    component: EditExpense,
     meta: {
       requiresAuth: true,
       layout: 'DefaultLayout',

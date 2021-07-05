@@ -17,7 +17,7 @@
             overflow-hidden
             shadow-inner
             text-center
-            bg-purple-800
+            bg-purple-400
             table
             cursor-pointer
           "
@@ -78,7 +78,7 @@
             viewBox="0 0 24 24"
             stroke="currentColor"
           />
-          <span>Profile</span>
+          <span>{{ $t('user.profile') }}</span>
         </a>
       </li>
       <li class="flex">
@@ -109,7 +109,7 @@
             viewBox="0 0 24 24"
             stroke="currentColor"
           />
-          <span>Settings</span>
+          <span>{{ $t('user.settings') }}</span>
         </a>
       </li>
       <li class="flex">
@@ -132,7 +132,7 @@
           @click.prevent="logout"
         >
           <LogoutIcon class="w-4 h-4 mr-3" />
-          <span>Log out</span>
+          <span>{{ $t('user.logout') }}</span>
         </a>
       </li>
     </ul>
