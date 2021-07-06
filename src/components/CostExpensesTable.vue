@@ -126,7 +126,7 @@
   export default defineComponent({
     name: 'CostExpensesTable',
     props: {
-      items: [],
+      items: <any>[],
       type: String,
       collection: String,
     },

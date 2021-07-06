@@ -134,7 +134,7 @@
                   pointer-events-none
                 "
               >
-                <CurrencyEuroIcon class="w-5 h-5" />
+                <span class="w-5 h-5">€</span>
               </div>
             </div>
             <div class="relative">
@@ -247,7 +247,7 @@
           />
         </label>
       </div>
-      <div class="flex items-center justify-start mt-2">
+      <div class="flex items-center justify-start mt-6">
         <button
           class="
             inline-block
@@ -269,12 +269,48 @@
       </div>
     </form>
     <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
-      <div class="">Mensualidad: {{ currency.format(this.feeFormulae) }}</div>
-      <div class="">
-        Número de cuotas totales: {{ currency.format(this.totalFees) }}
+      <h2
+        class="
+          mb-4
+          text-xl
+          font-semibold
+          text-gray-700
+          dark:text-gray-200
+          pb-2
+          border-b
+        "
+      >
+        {{ $t('villacobete.mortgageDetail') }}
+      </h2>
+      <div
+        class="
+          flex
+          justify-between
+          font-semibold
+          mb-4
+          pb-4
+          border-b border-gray-800
+          text-xl
+        "
+      >
+        <span>{{ $t('villacobete.monthlyPayment') }}:</span
+        ><span>{{ currency.format(this.feeFormulae) }}</span>
       </div>
-      <div class="">
-        Importe total a pagar: {{ currency.format(this.totalMortgage) }}
+      <div class="flex justify-between mb-4 pb-4 border-b border-gray-800">
+        <span>{{ $t('villacobete.totalFees') }}:</span
+        ><span>{{ this.totalFees }}</span>
+      </div>
+      <div class="flex justify-between mb-4 pb-4 border-b border-gray-800">
+        <span>{{ $t('villacobete.totalAmount') }}:</span
+        ><span>{{ currency.format(this.totalMortgage) }}</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span>{{ $t('villacobete.totalCost') }}:</span
+        ><span>{{ currency.format(this.totalMortgage) }}</span>
+      </div>
+      <div class="flex justify-between mb-2">
+        <span>{{ $t('villacobete.amountInterest') }}:</span
+        ><span>{{ currency.format(this.totalMortgage) }}</span>
       </div>
     </div>
   </div>

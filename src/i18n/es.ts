@@ -25,6 +25,12 @@ const messages = {
       vatInc: 'IVA Inc.',
       actions: 'Acciones',
       payments: 'Pagos',
+      mortgageDetail: 'Detalle de hipoteca',
+      monthlyPayment: 'Mensualidad',
+      totalFees: 'Número de cuotas totales',
+      totalAmount: 'Importe total a pagar',
+      totalCost: 'Coste total del crédito',
+      amountInterest: 'Importe de los intereses',
     },
   },
   en: {

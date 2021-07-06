@@ -241,23 +241,25 @@
       this.getPayments()
       this.getExpenses()
     },
-    methods: {
-      sumTotals(arr: []): any {
+    computed: {
+      sumTotals(arr: any[]): number {
         console.log(arr)
-        return arr.reduce((a, b) => a + (b[total] || 0), 0)
+        return arr.reduce((a, b) => a + (b.total || 0), 0)
       },
+    },
+    methods: {
       getPayments() {
-        db.ref(this.paymentsCollection).on('value', (res) => {
+        db.ref(this.paymentsCollection).on('value', (res: any) => {
           const item = new Map(Object.entries(res.val()))
-          item.forEach((val, key) => {
+          item.forEach((val: any, key: any) => {
             this.payments.push({ key: key, ...val })
           })
         })
       },
       getExpenses() {
-        db.ref(this.expensesCollection).on('value', (res) => {
+        db.ref(this.expensesCollection).on('value', (res: any) => {
           const item = new Map(Object.entries(res.val()))
-          item.forEach((val, key) => {
+          item.forEach((val: any, key: any) => {
             this.expenses.push({ key: key, ...val })
           })
         })
