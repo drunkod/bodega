@@ -11,7 +11,7 @@
       justify-between
     "
   >
-    <span>{{ $t('cellar.myCellar') }}</span>
+    <span>{{ $t('bottles.bottles') }}</span>
     <button
       class="
         inline-block
@@ -98,7 +98,7 @@
         </thead>
         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
           <TableItem
-            v-for="bottle in filteredCellar"
+            v-for="bottle in filteredBottles"
             :key="bottle.id"
             :item="bottle"
             @editItem="editBottle(bottle)"
@@ -126,7 +126,7 @@
   import TableItem from '@/components/Cellar/TableItem.vue'
   import Modal from '@/components/Modal.vue'
   import BottleForm from '@/components/Cellar/BottleForm.vue'
-  import { mapActions, mapGetters } from 'vuex'
+  import { getBottles } from '@/api/bottles'
 
   export default defineComponent({
     name: 'Cellar',
@@ -145,22 +145,15 @@
         openedNewBottle: false,
         activeBottle: <any>null,
         search: '',
+        bottles: <any>[],
       }
     },
     created() {
-      if (this.getCellar.length === 0) {
-        this.fetchCellar()
-      }
-    },
-    destroyed() {
-      // this.destroyCellar()
+      this.getBottles()
     },
     computed: {
-      ...mapGetters({
-        getCellar: 'cellar/cellar',
-      }),
-      filteredCellar(): any[] {
-        return this.getCellar.filter((bottle: any) => {
+      filteredBottles(): any[] {
+        return this.bottles.filter((bottle: any) => {
           return (
             bottle.name.toLowerCase().includes(this.search.toLowerCase()) ||
             bottle.cellar.toLowerCase().includes(this.search.toLowerCase()) ||
@@ -170,12 +163,18 @@
       },
     },
     methods: {
-      ...mapActions({
-        fetchCellar: 'cellar/fetchCellar',
-        unsuscribeCellar: 'cellar/unsuscribeCellar',
-        destroyCellar: 'cellar/destroyCellar',
-      }),
+      async getBottles() {
+        try {
+          let { data, error, status } = await getBottles()
 
+          if (error && status !== 406) throw error
+          if (data) {
+            this.bottles = data
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      },
       toggleNewBottle() {
         if (this.openedNewBottle) {
           this.activeBottle = null

@@ -1,13 +1,14 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Cellar from '../views/Cellar.vue'
-import Bottle from '../views/Bottle.vue'
-import Reviews from '../views/Reviews.vue'
-import Stats from '../views/Stats.vue'
-import Profile from '../views/Profile.vue'
-import NotFound from '../views/NotFound.vue'
-import store from '../store'
+import Home from '@/views/Home.vue'
+import Login from '@/views/Login.vue'
+import Cellar from '@/views/Cellar.vue'
+import Bottle from '@/views/Bottle.vue'
+import Reviews from '@/views/Reviews.vue'
+import Bottles from '@/views/Bottles.vue'
+import Stats from '@/views/Stats.vue'
+import Profile from '@/views/Profile.vue'
+import NotFound from '@/views/NotFound.vue'
+import store from '@/store'
 
 const routes = [
   {
@@ -40,6 +41,15 @@ const routes = [
     path: '/bottle/:id',
     name: 'Bottle',
     component: Bottle,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },
+  {
+    path: '/bottles',
+    name: 'Bottles',
+    component: Bottles,
     meta: {
       requiresAuth: true,
       layout: 'DefaultLayout',
