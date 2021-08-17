@@ -98,13 +98,23 @@
 
       const handleLogin = async () => {
         try {
+          const email = "1087347885@tg.com"
           loading.value = true
-          const { error } = await supabase.auth.signIn(
-            { provider: 'google' },
+          const response = await supabase.auth.signIn(
+            {email},
             {
               redirectTo: '/',
             }
           )
+          // const { error } = await supabase.auth.signIn(
+          //   { provider: 'google' },
+          //   {
+          //     redirectTo: '/',
+          //   }
+          // )
+
+          const error = response.error 
+          console.log(JSON.stringify(response))        
           if (error) throw error
         } catch (error) {
           message.value = error.error_description || error.message
