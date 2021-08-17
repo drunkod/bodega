@@ -4,14 +4,14 @@ import App from './App.vue'
 import './index.css'
 import router from './router'
 import store from './store'
-import messages from './i18n/es'
+import messages from './i18n/ru'
 
 /* auth.onAuthStateChanged((user) => {
   store.dispatch('fetchUser', user)
 }) */
 
 const i18n = createI18n({
-  locale: 'es',
+  locale: 'ru',
   fallbackLocale: 'en',
   messages,
 })
