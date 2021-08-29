@@ -104,9 +104,6 @@
 <script lang="ts">
   import { defineComponent } from 'vue'
   import { mapActions, mapGetters } from 'vuex'
-  import { useQuery, useResult } from "@vue/apollo-composable";
-  // import { SearchResultItemConnection } from "@octokit/graphql-schema";
-  import { ALL_TODOS } from "../graphql/documents";
   import QuickStats from '@/components/Stats/QuickStats.vue'
   import TableItemCellar from '@/components/Cellar/TableItem.vue'
   import TableItemReviews from '@/components/Reviews/TableItem.vue'

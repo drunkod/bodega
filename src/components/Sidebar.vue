@@ -145,6 +145,25 @@
             <span class="ml-4">{{ $t('stats.stats') }}</span>
           </router-link>
         </li>
+        <li class="relative px-6 py-3">
+          <router-link
+            class="
+              inline-flex
+              items-center
+              w-full
+              text-sm
+              font-semibold
+              transition-colors
+              duration-150
+              hover:text-gray-800
+              dark:hover:text-gray-200
+            "
+            to="/notes"
+          >
+            <ChartBarIcon class="w-5 h-5" />
+            <span class="ml-4">Notes</span>
+          </router-link>
+        </li>        
       </ul>
     </div>
   </aside>

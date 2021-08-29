@@ -7,6 +7,7 @@ import Reviews from '@/views/Reviews.vue'
 import Bottles from '@/views/Bottles.vue'
 import Stats from '@/views/Stats.vue'
 import Profile from '@/views/Profile.vue'
+import Notes from '@/views/Notes.vue'
 import NotFound from '@/views/NotFound.vue'
 import store from '@/store'
 
@@ -77,6 +78,15 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },
+  {
+    path: '/notes',
+    name: 'Notes',
+    component: Notes,
     meta: {
       requiresAuth: true,
       layout: 'DefaultLayout',
