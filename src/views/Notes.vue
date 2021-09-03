@@ -1,56 +1,64 @@
 <template>
-  <div class="flex justify-center" v-if="loading">
-    <p class="text-xl font-bold text-gray-500">Request is loading...</p>
-  </div>
-  <div class="flex justify-center" v-else-if="error">
-    <p class="text-xl font-bold text-red-600">Request has failed!</p>
-  </div>
-  <div v-else-if="notes.length">
-    <ul class="md:block max-w-6xl mx-auto">
-      <li
-        class="relative mb-8"
-        v-for="note in notes"
-        :key="note.node.id"
-      >
-        <!-- <Note :note="note" :search-options="searchOptions" /> -->
-      </li>
-    </ul>
-  </div>
+  <h1
+    class="text-4xl sm:text-6xl lg:text-7xl leading-none font-extrabold tracking-tight text-gray-900 mt-10 mb-8 sm:mt-14 sm:mb-10 max-w-6xl mx-auto"
+  >
+    Найти
+    <span
+      class="bg-clip-text text-transparent bg-gradient-to-r from-green-600 via-green-500 to-green-400"
+      >GitHub</span
+    >
+    Репозитории:
+  </h1>
+
+  <!-- Строка поиска поискового клиента. 
+  Когда пользователь вводит запрос в строку поиска, 
+  на основе текущего запроса выбирается новый список репозиториев. -->
+  <SearchBar @search="search" />
+
+  <!-- Список репозиториев, полученных из GitHub GraphQL API. -->
+  <RepositoryList :search-options="searchOptions" />
 </template>
+
 <script lang="ts">
-import { defineComponent, toRefs } from "vue";
-import { useQuery, useResult } from "@vue/apollo-composable";
-// import { SearchResultItemConnection } from "@octokit/graphql-schema";
-import { ALL_TODOS } from "../graphql/documents";
-// import Note from "./Note.vue";
+import { defineComponent, reactive } from "vue";
+import RepositoryList from "@/components/Notes/RepositoryList.vue";
+import SearchBar from "@/components/Notes/SearchBar.vue";
+
 export default defineComponent({
   name: "Notes",
   components: {
-    // Note
+    RepositoryList,
+    SearchBar
   },
-  props: {
-    searchOptions: {
-      type: Object,
-      default() {
-        return { query: "", limit: 10 };
-      }
-    }
-  },
-  setup(props: { searchOptions: Record<string, any> }) {
-    const { searchOptions } = toRefs(props);
-    const { result, loading, error } = useQuery<{
-      search: SearchResultItemConnection;
-    }>(ALL_TODOS, searchOptions);
-    const notes = useResult(
-      result,
-      [],
-      data => data.search && data.search.edges
-    );
+  setup() {
+    const searchOptions = reactive({
+      query: "",
+      limit: 10
+    });
+
+// Ввод запроса вызывает событие «поиска» с текущим запросом и
+//  запускает search функцию в <App />компоненте.
+//  Эта search функция устанавливает значение query поля
+//   в реактивном searchOptions объекте.
+    const search = (query: string) => {
+      searchOptions.query = query;
+    };
+
     return {
-      loading,
-      error,
-      notes
+      searchOptions,
+      search
     };
   }
 });
 </script>
+
+<style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+</style>

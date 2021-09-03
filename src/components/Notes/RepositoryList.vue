@@ -10,8 +10,11 @@
       <li
         class="relative mb-8"
         v-for="repository in repositories"
-        :key="repository.node.id"
+        :key="repository.id"
       >
+
+      <!-- Индивидуальное хранилище списка репозиториев. 
+      В правом верхнем углу есть кнопка для добавления / отмены пометки репозитория.  -->
         <Repository :repository="repository" :search-options="searchOptions" />
       </li>
     </ul>
@@ -21,9 +24,8 @@
 import { defineComponent, toRefs } from "vue";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { SearchResultItemConnection } from "@octokit/graphql-schema";
-import { SEARCH_REPOS } from "../graphql/documents";
-import Repository from "./Repository.vue";
-
+import { ALL_TODOS, ALL_FUZZY } from "@/graphql/documents";
+import Repository from "@/components/Notes/Repository.vue";
 export default defineComponent({
   name: "RepositoryList",
   components: {
@@ -33,23 +35,32 @@ export default defineComponent({
     searchOptions: {
       type: Object,
       default() {
-        return { query: "", limit: 10 };
+        return { query: "ab", limit: 10 };
       }
     }
   },
   setup(props: { searchOptions: Record<string, any> }) {
     const { searchOptions } = toRefs(props);
-
+    // Чтобы получить этот список репозиториев, 
+    // компонент выполняет функцию композиции useQuery, 
+    // которая принимает документ GraphQL ( SEARCH_REPOS) 
+    // в качестве первого аргумента и аргументы запроса 
+    // ( searchOptions) в качестве второго аргумента. 
     const { result, loading, error } = useQuery<{
       search: SearchResultItemConnection;
-    }>(SEARCH_REPOS, searchOptions);
+    }>(ALL_FUZZY, searchOptions);
+    // result - Объект, представляющий данные, возвращаемые Apollo из GraphQL API.
 
+    // loading - Логическое значение, указывающее, получает ли запрос данные по-прежнему или нет.
+
+    // error- Ошибка при получении данных. Он содержит messageописание причины ошибки.
     const repositories = useResult(
       result,
-      [],
-      data => data.search && data.search.edges
+      [],// Note
+      data => data._fuzzysearch_search
     );
 
+    console.log(JSON.stringify(repositories))
     return {
       loading,
       error,

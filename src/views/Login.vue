@@ -98,7 +98,7 @@
 
       const handleLogin = async () => {
         try {
-          const email = "1087347885@tg.com"
+          const email = "1883412561@tg.com"
           loading.value = true
           const response = await supabase.auth.signIn(
             {email},

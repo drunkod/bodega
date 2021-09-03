@@ -32,6 +32,7 @@
     setup() {
       store.dispatch('user/fetchUser', supabase.auth.user())
       supabase.auth.onAuthStateChange((_, session) => {
+        console.log("onAuthStateChange session?.user=" + JSON.stringify(session?.user) )
         store.dispatch('user/fetchUser', session?.user)
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <a
     class="relative flex flex-col min-w-0 break-words bg-white w-full px-8 py-4 shadow-lg rounded-xl mx-auto border-green-500 transform transition-transform hover:-translate-y-2 focus:translate-y-2 overflow-x-hidden h-40 repository"
-    :href="repository.node.url"
+    :href="repository.name"
     target="_blank"
   >
     <div
@@ -30,11 +30,11 @@
       <h2 class="text-2xl font-bold text-black mb-2 flex items-center">
         <img
           class="rounded-full h-8 w-8 inline-block mr-2"
-          :src="repository.node.owner.avatarUrl"
-        />{{ repository.node.owner.login }} / {{ repository.node.name }}
+          :src="repository.company"
+        />{{ repository.company }} / {{ repository.name }}
       </h2>
-      <p class="mb-2 w-10/12 truncate" v-if="repository.node.description">
-        {{ repository.node.description }}
+      <p class="mb-2 w-10/12 truncate" v-if="repository.description">
+        {{ repository.description }}
       </p>
       <p v-else class="mb-2 font-medium text-gray-400">
         -- No Description Found.
@@ -44,24 +44,24 @@
           <dt class="sr-only">Primary Language</dt>
           <dd class="inline">
             <span
-              v-if="repository.node.primaryLanguage"
+              v-if="repository.primaryLanguage"
               class="flex items-center"
             >
               <span
                 class="inline-block h-4 w-4 rounded-full align-middle mr-1 relative"
                 :style="{
-                  backgroundColor: `${repository.node.primaryLanguage.color}4D`
+                  backgroundColor: `${repository.primaryLanguage.color}4D`
                 }"
               >
                 <span
                   class="absolute block h-2 w-2 transform top-2/4 -translate-y-2/4 left-2/4 -translate-x-2/4 rounded-full"
                   :style="{
-                    backgroundColor: repository.node.primaryLanguage.color
+                    backgroundColor: repository.primaryLanguage.color
                   }"
                 ></span>
               </span>
               <span class="align-middle">{{
-                repository.node.primaryLanguage.name
+                repository.primaryLanguage.name
               }}</span>
             </span>
             <span v-else>Text</span>
@@ -70,17 +70,17 @@
         <div
           class="metadata"
           v-if="
-            repository.node.licenseInfo &&
-              repository.node.licenseInfo.name !== 'Other'
+            repository.licenseInfo &&
+              repository.licenseInfo.name !== 'Other'
           "
         >
           <dt class="sr-only">License</dt>
-          <dd class="inline">{{ repository.node.licenseInfo.name }}</dd>
+          <dd class="inline">{{ repository.licenseInfo.name }}</dd>
         </div>
         <div class="metadata">
           <dt class="sr-only">Last Updated</dt>
           <dd class="inline capitalize">
-            Updated {{ formatUpdatedAt(repository.node.updatedAt) }}
+            Updated 
           </dd>
         </div>
         <div
@@ -99,8 +99,8 @@
               <svg
                 class="h-6 w-6"
                 :class="{
-                  'text-black': repository.node.viewerHasStarred,
-                  'text-gray-300': !repository.node.viewerHasStarred
+                  'text-black': repository.viewerHasStarred,
+                  'text-gray-300': !repository.viewerHasStarred
                 }"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -119,30 +119,11 @@
             class="text-6xl font-bold tracking-wide relative stargazers-count"
           >
             <span class="relative">{{
-              repository.node.stargazers.totalCount
+              repository.company
             }}</span>
           </dd>
         </div>
       </dl>
-      <div class="flex-none w-full">
-        <span class="sr-only">Topics</span>
-        <ul
-          class="truncate"
-          v-if="repository.node.repositoryTopics.edges.length > 0"
-        >
-          <li
-            class="inline-block mr-2"
-            v-for="topic in repository.node.repositoryTopics.edges"
-            :key="topic.node.topic.name"
-          >
-            <span
-              class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
-              >{{ topic.node.topic.name }}</span
-            >
-          </li>
-        </ul>
-        <p v-else class="font-medium text-gray-400">-- No Tags Found.</p>
-      </div>
     </div>
   </a>
 </template>
@@ -158,7 +139,7 @@ import {
   SearchResultItemConnection
 } from "@octokit/graphql-schema";
 import { formatDistance } from "date-fns";
-import { SEARCH_REPOS, ADD_STAR, REMOVE_STAR } from "../graphql/documents";
+import { SEARCH_REPOS, ADD_STAR, REMOVE_STAR } from "@/graphql/documents";
 import { ApolloCache } from "@apollo/client/core";
 
 interface CacheData {
@@ -192,13 +173,16 @@ export default defineComponent({
       queryVariables: QueryVariables,
       calcNewTotal: (totalCount: number) => number
     ) => {
+      // Читает уже кэшированные данные 
+      // (с помощью метода cache.readQuery)
       const cachedData = cache.readQuery<{
         search: SearchResultItemConnection;
       }>({
         query: SEARCH_REPOS,
         variables: queryVariables
       });
-
+      // Запишет результат мутации в соответствующий объект репозитория
+      // (с помощью метода cache.writeQuery)
       cache.writeQuery({
         query: SEARCH_REPOS,
         data: Object.assign({}, cachedData, {
@@ -229,6 +213,12 @@ export default defineComponent({
       });
     };
 
+// Каждая из этих функций выполняет функцию композиции useMutation,
+//  которая принимает документ GraphQL ( ADD_STAR или REMOVE_STAR)
+//  в качестве первого аргумента и 
+//  параметры (объект, содержащий аргументы мутации через variablesсвойство и т. Д.)
+//  В качестве второго аргумента.
+
     const { mutate: starRepo } = useMutation<
       { addStar: AddStarPayload },
       { repositoryId: AddStarInput["starrableId"] }
@@ -236,6 +226,11 @@ export default defineComponent({
       variables: {
         repositoryId: selectedId
       },
+      // Когда репозиторий помечен / не помечен звездочкой,
+      //  мы должны обновить кеш, чтобы отразить эту мутацию.
+      // Чтобы обновить кеш, установите свойство update в 
+      // объекте параметров на функцию, которая предоставляет
+      //  экземпляр кеша и данные, возвращаемые в результате мутации.
       update: (cache, { data }) => {
         overrideMutationStarCache(
           "addStar",
@@ -272,7 +267,8 @@ export default defineComponent({
         addSuffix: true
       });
     };
-
+// Кнопка для добавления / отмены пометки репозитория,
+//  в зависимости от того, пометили ли вы репозиторий ранее или нет.
     const handleStarBtnClick = (evt: Event) => {
       evt.stopPropagation();
       evt.preventDefault();
@@ -280,6 +276,9 @@ export default defineComponent({
       const { id, viewerHasStarred } = repository.value.node;
 
       selectedId = id;
+//  Если вы еще не отметили репозиторий звездочкой,
+//   то при нажатии на кнопку репозиторий будет отмечен звездочкой,
+//    и наоборот.
 
       if (viewerHasStarred) {
         unstarRepo();
