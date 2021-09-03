@@ -1,5 +1,9 @@
 <template>
-  <form class="hidden md:block max-w-6xl mx-auto mb-16">
+  <multiselect v-model="multiselect_value" tag-placeholder="Add this as new tag"
+   placeholder="Search or add a tag" label="name"
+    track-by="code" :options="options" :multiple="true"
+     :taggable="true" @tag="addTag"></multiselect>
+  <!-- <form class="hidden md:block max-w-6xl mx-auto mb-16">
     <div
       class="relative h-full w-full focus:ring-indigo-500 focus:border-indigo-500
     shadow-sm text-2xl border-gray-300 bg-gray-200 rounded-xl px-7 py-7 bg-opacity-70"
@@ -33,31 +37,78 @@
         @input="handleInputChange"
       />
     </div>
-  </form>
+  </form> -->
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, watch, toRefs } from "vue";
 import { debounce } from "@/utils";
+import Multiselect from "vue-multiselect";
 
 export default defineComponent({
   name: "SearchBar",
+  components: { Multiselect },
   setup(props, context) {
-    
+    console.log(props);
+  
     // DEBOUNCE в handleInputChange обработчик событий, чтобы 
     // избежать отправки search события на каждом изменении входного сигнала.
 
-    const handleInputChange = debounce((evt: Event) => {
-      const element = evt.target as HTMLInputElement;
-
-      context.emit("search", element.value);
-      console.log(element.value);
+    const handleInputChange = debounce((evt) => {
+      console.log(evt);
+      // const element = evt.target as Object;
+      // console.log(element);
+      context.emit("search", evt);
+      // console.log(element.value);
     }, 300);
+
 
     return {
       handleInputChange
     };
-  }
+  },
+  data () {
+    return {
+      multiselect_value: [
+        { name: 'Javascript', code: 'js' }
+      ],
+      options: [
+        { name: 'Vue.js', code: 'vu' },
+        { name: 'Javascript', code: 'js' },
+        { name: 'Open Source', code: 'os' }
+      ]
+    }
+  },
+  methods: {
+    addTag (newTag) {
+      const tag = {
+        name: newTag,
+        code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
+      }
+      this.options.push(tag)
+      this.multiselect_value.push(tag)
+    },
+    arrayToString (arr) {
+      if (arr.length) {
+        if(arr.length === 1) {
+          return arr[0].name
+        } else if (arr.length > 1)
+        { return arr.reduce((total, amount) => total.name +" "+ amount.name)} 
+
+      }else{
+        return ''
+      }
+
+    }
+  },       
+  computed: {
+    getTotalCars() {
+        let multiselect_value = this.multiselect_value;
+        this.handleInputChange(this.arrayToString(multiselect_value));
+        console.log(this.arrayToString(multiselect_value.length));
+
+    }
+  },
 });
 </script>
 
@@ -66,3 +117,4 @@ export default defineComponent({
   width: calc(100% - 3.5rem);
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
