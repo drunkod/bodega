@@ -8,6 +8,7 @@ import Bottles from '@/views/Bottles.vue'
 import Stats from '@/views/Stats.vue'
 import Profile from '@/views/Profile.vue'
 import Notes from '@/views/Notes.vue'
+import Map from '@/views/Map.vue'
 import NotFound from '@/views/NotFound.vue'
 import store from '@/store'
 
@@ -92,6 +93,15 @@ const routes = [
       layout: 'DefaultLayout',
     },
   },
+  {
+    path: '/map',
+    name: 'Map',
+    component: Map,
+    meta: {
+      requiresAuth: true,
+      layout: 'DefaultLayout',
+    },
+  },  
   { path: '/404', component: NotFound },
   { path: '/:pathMatch(.*)*', redirect: '/404' },
 ]
