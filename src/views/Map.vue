@@ -13,52 +13,197 @@
   <!-- Строка поиска поискового клиента. 
   Когда пользователь вводит запрос в строку поиска, 
   на основе текущего запроса выбирается новый список репозиториев. -->
-  <SearchBar @search="search" />
+  <!-- <SearchBar @search="search" /> -->
 
   <!-- Список репозиториев, полученных из GitHub GraphQL API. -->
-  <RepositoryList :search-options="searchOptions" />
+  <!-- <RepositoryList :search-options="searchOptions" /> -->
+
+  	<div>
+		<mgl-map
+			ref="map"
+			height="400px" width="800px"
+			style="margin-bottom: 20px"
+			:center="center"
+			:zoom="zoom"
+			:attribution-control="false"
+			@map:load="onLoad"
+			@map:zoomstart="isZooming = true"
+			@map:zoomend="isZooming = false"
+		>
+			<mgl-frame-rate-control/>
+			<mgl-fullscreen-control/>
+			<mgl-attribution-control/>
+			<mgl-navigation-control/>
+			<mgl-scale-control/>
+			<mgl-geolocation-control/>
+			<mgl-custom-control v-if="showCustomControl" position="top-left" :no-classes="!useClasses">
+				<mgl-button type="mdi" :path="buttonIcon" style="color: deepskyblue"/>
+        		<mgl-button type="mdi" :path="buttonIcon" style="color: deepskyblue"/>
+			</mgl-custom-control>
+			<mgl-style-switch-control :map-styles="mapStyles" :position="controlPosition"/>
+
+			<mgl-marker :coordinates="markerCoordinates" color="#cc0000" :scale="0.5"/>
+
+			<mgl-geo-json-source source-id="geojson" :data="geoJsonSource.data">
+				<mgl-line-layer
+					v-if="geoJsonSource.show"
+					layer-id="geojson"
+					:layout="geoJsonSource.layout"
+					:paint="geoJsonSource.paint"
+					@mouseenter="onMouseenter"
+				/>
+			</mgl-geo-json-source>
+
+		</mgl-map>
+		Loaded Count: {{ loaded }}<br>
+		Is Zooming: {{ isZooming }}<br>
+		<div>
+			<input type="radio" id="one" value="top-left" v-model="controlPosition"/>
+			<label for="one">top-left</label>
+			<br/>
+			<input type="radio" id="tw0" value="top-right" v-model="controlPosition"/>
+			<label for="tw0">top-right</label>
+			<br/>
+			<input type="radio" id="three" value="bottom-left" v-model="controlPosition"/>
+			<label for="three">bottom-left</label>
+			<br/>
+			<input type="radio" id="four" value="bottom-right" v-model="controlPosition"/>
+			<label for="four">bottom-right</label>
+			<br/>
+			<span>Attribution Position: {{ controlPosition }}</span>
+		</div>
+		<div>
+			<input type="checkbox" v-model="useClasses" id="noclasses">
+			<label for="noclasses">Use Custom Control Classes</label>
+		</div>
+	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import RepositoryList from "@/components/Map/RepositoryList.vue";
-import SearchBar from "@/components/Map/SearchBar.vue";
-
+import { defineComponent, reactive, ref, toRef, watch } from "vue";
+import { MglMap, MglFrameRateControl, MglFullscreenControl, MglAttributionControl, MglNavigationControl, MglScaleControl, MglGeolocationControl, MglCustomControl, MglStyleSwitchControl, MglMarker, MglGeoJsonSource,MglLineLayer, MglButton, MglDefaults, MglEvent, StyleSwitchItem, useMap  } from 'vue-maplibre-gl';
+import { mdiCursorDefaultClick } from '@mdi/js';
+import { LineLayout, LinePaint, MapLayerMouseEvent } from 'maplibre-gl';
+// import RepositoryList from "@/components/Map/RepositoryList.vue";
+// import SearchBar from "@/components/Map/SearchBar.vue";
+	MglDefaults.style = 'https://api.maptiler.com/maps/streets/style.json?key=cQX2iET1gmOW38bedbUh';
+	console.log('MglDefaults', MglDefaults);
 export default defineComponent({
   name: "Map",
   components: {
-    RepositoryList,
-    SearchBar
+    MglMap, MglFrameRateControl, MglFullscreenControl, MglAttributionControl, MglNavigationControl, MglScaleControl, MglGeolocationControl, MglCustomControl, MglStyleSwitchControl, MglMarker, MglGeoJsonSource,MglLineLayer, MglButton,
+    // RepositoryList,
+    // SearchBar
   },
-  setup() {
-    const searchOptions = reactive({
-      query: "",
-      limit: 10
-    });
+  		setup() {
+			const map               = useMap(),
+			showCustomControl = ref(true);
+			watch(toRef(map, 'isLoaded'), () => (console.log('IS LOADED', map)), { immediate: true });
+			watch(toRef(map, 'isMounted'), v => (console.log('IS MOUNTED', v)), { immediate: true });
+      const searchOptions = reactive({
+        query: "",
+        limit: 10
+      });
 
-// Ввод запроса вызывает событие «поиска» с текущим запросом и
-//  запускает search функцию в <App />компоненте.
-//  Эта search функция устанавливает значение query поля
-//   в реактивном searchOptions объекте.
-    const search = (query: string) => {
-      searchOptions.query = query;
-    };
+      // Ввод запроса вызывает событие «поиска» с текущим запросом и
+      //  запускает search функцию в <App />компоненте.
+      //  Эта search функция устанавливает значение query поля
+      //   в реактивном searchOptions объекте.
+      const search = (query: string) => {
+        searchOptions.query = query;
+      };
 
-    return {
-      searchOptions,
-      search
-    };
-  }
-});
+      return {
+				showCustomControl,		  
+				loaded           : ref(0),
+				isZooming        : false,
+				controlPosition  : ref('top-left'),
+				center           : [ 10.288107, 49.405078 ],
+				zoom             : 3,
+				useClasses       : true,
+				mapStyles        : [
+					{
+						name : 'Streets',
+						label: 'Streets',
+						// icon : { path: mdiRoad },
+						style: 'https://api.maptiler.com/maps/streets/style.json?key=cQX2iET1gmOW38bedbUh'
+					},
+					{ name: 'Basic', label: 'Basic', style: 'https://api.maptiler.com/maps/basic/style.json?key=cQX2iET1gmOW38bedbUh' },
+					{ name: 'Bright', label: 'Bright', style: 'https://api.maptiler.com/maps/bright/style.json?key=cQX2iET1gmOW38bedbUh' },
+					{ name: 'Satellite', label: 'Satellite', style: 'https://api.maptiler.com/maps/hybrid/style.json?key=cQX2iET1gmOW38bedbUh' },
+					{ name: 'Voyager', label: 'Voyager', style: 'https://api.maptiler.com/maps/voyager/style.json?key=cQX2iET1gmOW38bedbUh' }
+				] as StyleSwitchItem[],
+				buttonIcon       : mdiCursorDefaultClick,
+				markerCoordinates: [ 13.377507, 52.516267 ],
+				geoJsonSource    : {
+					show  : true,
+					data  : {
+						type    : 'FeatureCollection',
+						features: [
+							{
+								type      : 'Feature',
+								properties: {},
+								geometry  : {
+									type       : 'LineString',
+									coordinates: [
+										[ -122.483696, 37.833818 ],
+										[ -122.483482, 37.833174 ],
+										[ -122.483396, 37.8327 ],
+										[ -122.483568, 37.832056 ],
+										[ -122.48404, 37.831141 ],
+										[ -122.48404, 37.830497 ],
+										[ -122.483482, 37.82992 ],
+										[ -122.483568, 37.829548 ],
+										[ -122.48507, 37.829446 ],
+										[ -122.4861, 37.828802 ],
+										[ -122.486958, 37.82931 ],
+										[ -122.487001, 37.830802 ],
+										[ -122.487516, 37.831683 ],
+										[ -122.488031, 37.832158 ],
+										[ -122.488889, 37.832971 ],
+										[ -122.489876, 37.832632 ],
+										[ -122.490434, 37.832937 ],
+										[ -122.49125, 37.832429 ],
+										[ -122.491636, 37.832564 ],
+										[ -122.492237, 37.833378 ],
+										[ -122.493782, 37.833683 ]
+									]
+								}
+							}
+						]
+					},
+					layout: {
+						'line-join': 'round',
+						'line-cap' : 'round'
+					} as LineLayout,
+					paint : {
+						'line-color': '#FF0000',
+						'line-width': 8
+					} as LinePaint
+
+				},
+          searchOptions,
+          search
+			};
+		},
+		methods: {
+			onLoad(e: MglEvent) {
+				this.loaded++;
+				console.log(e.type, e);
+			},
+			onMouseenter(e: MapLayerMouseEvent) {
+				console.log('EVENT', e.type, e.lngLat);
+			}
+		},
+		mounted() {
+			setTimeout(() => (this.markerCoordinates = [ 13.377507, 42.516267 ]), 5000);
+			// setInterval(() => (this.geoJsonSource.show = !this.geoJsonSource.show), 1000);
+		}
+	});
 </script>
 
-<style>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+<style lang="scss">
+	@import "@/assets/css/maplibre";
+  @import "maplibre-gl/dist/maplibre-gl.css";
 
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 </style>
